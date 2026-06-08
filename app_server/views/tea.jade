@@ -1,0 +1,153 @@
+extends layout
+
+block content
+  .row.banner
+    .col-12
+      h1 Tea Menu
+
+  .row
+    .col-12.col-lg-9
+      h2 Our Teas
+      .row
+        // Green Tea
+        .col-12.col-md-6
+          .card.card-primary
+            .card-block
+              h3 Green Tea
+              .d-flex
+                img.img-fluid(src='/images/green_tea.jpg', alt='Green Tea', style='width: 100px; height: auto; margin-right: 15px;')
+                .tea-description
+                  p A refreshing drink with numerous health benefits.
+                  p Cost: &#8377; 50
+                  button.btn.btn-primary(onclick='addToCart("green_tea", "Green Tea", 50)') Add to Cart
+
+        // Black Tea
+        .col-12.col-md-6
+          .card.card-primary
+            .card-block
+              h3 Black Tea
+              .d-flex
+                img.img-fluid(src='/images/black_tea.jpg', alt='Black Tea', style='width: 100px; height: auto; margin-right: 15px;')
+                .tea-description
+                  p A strong and robust tea, perfect for morning refreshment.
+                  p Cost: &#8377; 50
+                  button.btn.btn-primary(onclick='addToCart("black_tea", "Black Tea", 50)') Add to Cart
+
+        // Herbal Tea
+        .col-12.col-md-6
+          .card.card-primary
+            .card-block
+              h3 Herbal Tea
+              .d-flex
+                img.img-fluid(src='/images/herbal_tea.jpg', alt='Herbal Tea', style='width: 100px; height: auto; margin-right: 15px;')
+                .tea-description
+                  p A caffeine-free option made from various herbs and spices.
+                  p Cost: &#8377; 60
+                  button.btn.btn-primary(onclick='addToCart("herbal_tea", "Herbal Tea", 60)') Add to Cart
+
+        // Chamomile Tea
+        .col-12.col-md-6
+          .card.card-primary
+            .card-block
+              h3 Chamomile Tea
+              .d-flex
+                img.img-fluid(src='/images/chamomile_tea.jpg', alt='Chamomile Tea', style='width: 100px; height: auto; margin-right: 15px;')
+                .tea-description
+                  p A calming tea known for its relaxing properties.
+                  p Cost: &#8377; 60
+                  button.btn.btn-primary(onclick='addToCart("chamomile_tea", "Chamomile Tea", 60)') Add to Cart
+
+        // Earl Grey Tea
+        .col-12.col-md-6
+          .card.card-primary
+            .card-block
+              h3 Earl Grey Tea
+              .d-flex
+                img.img-fluid(src='/images/earl_grey_tea.jpg', alt='Earl Grey Tea', style='width: 100px; height: auto; margin-right: 15px;')
+                .tea-description
+                  p A black tea infused with bergamot for a unique flavor.
+                  p Cost: &#8377; 70
+                  button.btn.btn-primary(onclick='addToCart("earl_grey_tea", "Earl Grey Tea", 70)') Add to Cart
+
+        // Masala Chai
+        .col-12.col-md-6
+          .card.card-primary
+            .card-block
+              h3 Masala Chai
+              .d-flex
+                img.img-fluid(src='/images/masala_chai.jpg', alt='Masala Chai', style='width: 100px; height: auto; margin-right: 15px;')
+                .tea-description
+                  p A traditional Indian spiced tea with milk and spices.
+                  p Cost: &#8377; 80
+                  button.btn.btn-primary(onclick='addToCart("masala_chai", "Masala Chai", 80)') Add to Cart
+
+        // Jasmine Tea
+        .col-12.col-md-6
+          .card.card-primary
+            .card-block
+              h3 Jasmine Tea
+              .d-flex
+                img.img-fluid(src='/images/jasmine_tea.jpg', alt='Jasmine Tea', style='width: 100px; height: auto; margin-right: 15px;')
+                .tea-description
+                  p A fragrant tea made from green tea and jasmine blossoms.
+                  p Cost: &#8377; 70
+                  button.btn.btn-primary(onclick='addToCart("jasmine_tea", "Jasmine Tea", 70)') Add to Cart
+
+        // Mint Tea
+        .col-12.col-md-6
+          .card.card-primary
+            .card-block
+              h3 Mint Tea
+              .d-flex
+                img.img-fluid(src='/images/mint_tea.jpg', alt='Mint Tea', style='width: 100px; height: auto; margin-right: 15px;')
+                .tea-description
+                  p A refreshing tea infused with fresh mint leaves.
+                  p Cost: &#8377; 60
+                  button.btn.btn-primary(onclick='addToCart("mint_tea", "Mint Tea", 60)') Add to Cart
+
+    .row
+      .col-12.col-lg-3
+        p If you've tried our teas, leave a review and let others know!
+  // Toast notification
+  .toast-container
+    .toast(id='toast', style='position: fixed; bottom: 20px; right: 20px; display: none;')
+      .toast-body 
+
+  // JavaScript for Add to Cart functionality
+  script.
+    function addToCart(itemId, itemName, itemPrice) {
+      const item = {
+        id: itemId,
+        name: itemName,
+        price: itemPrice,
+        quantity: 1 // Set the quantity you want to add
+      };
+
+      // Send a POST request to add the item to the cart
+      fetch('/cart/add', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(item)
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Failed to add item to cart');
+        } else {
+          showToast(itemName); // Show toast with item name
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+
+      function showToast(itemName) {
+        const toast = document.getElementById('toast');
+        toast.querySelector('.toast-body').textContent = `${itemName} added to cart!`; // Set toast message
+        toast.style.display = 'block';
+        setTimeout(() => {
+          toast.style.display = 'none';
+        }, 3000); // Hide after 3 seconds
+      }
+    }
